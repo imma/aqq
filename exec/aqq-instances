@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+function main {
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+  source "$shome/script/profile"
+
+  if [[ "$#" == 0 ]]; then
+    set -- .
+  fi
+
+  aq instances '[.Reservations[].Instances] | reduce flatten[] as $i ({}; .[$i.InstanceId] = $i) | to_entries | sort_by(.key) | from_entries' | jq -r -S "$@"
+}
+
+source sub "$BASH_SOURCE" "$@"
