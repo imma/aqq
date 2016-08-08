@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+function main {
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+  source "$shome/script/profile"
+
+  local nm_resource="$1"; shift
+  local jq_index="$1"; shift
+
+  aq "$nm_resource" -L "$shome/jq" "import \"aws\" as aws; $jq_index" | jq -r -S "$@"
+}
+
+source sub "$BASH_SOURCE" "$@"
