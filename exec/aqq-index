@@ -5,8 +5,13 @@ function main {
   source "$shome/script/profile"
 
   local nm_resource="$1"; shift
+  local jq_index="$1"; shift
 
-  aq cat "$nm_resource" -L "$shome/jq" "$1" | jq -r -S "${@:2}"
+  if [[ "$#" == 0 ]]; then
+    set -- .
+  fi
+
+  aq "$nm_resource" -L "$shome/jq" "$jq_index" | jq -r -S "${@}"
 }
 
 source sub "$BASH_SOURCE" "$@"
