@@ -8,7 +8,14 @@ function main {
     set -- .
   fi
 
-  aq instances '[.Reservations[].Instances] | reduce flatten[] as $i ({}; .[$i.InstanceId] = $i) | to_entries | sort_by(.key) | from_entries' | jq -r -S "$@"
+  aq instances -L "$shome/jq" 'import "aws" as aws; 
+    [.Reservations[].Instances] 
+      | aws::index(.InstanceId) 
+      + aws::index(.PrivateIpAddress)
+      + aws::index(.PrivateDnsName)
+      + aws::index(.PublicIpAddress)
+      + aws::index(.PublicDnsName)
+    ' | jq -r -S "$@"
 }
 
 source sub "$BASH_SOURCE" "$@"
