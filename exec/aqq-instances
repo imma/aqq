@@ -4,7 +4,9 @@ function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile"
 
-  aqq index instances '
+  aqq index "${BASH_SOURCE##*/aqq-}" '
+    import "aws" as aws;
+
     [.Reservations[].Instances] 
       | aws::index(.InstanceId) 
       + aws::index(.PrivateIpAddress)
