@@ -13,7 +13,7 @@ function main {
   (set +f; 
     cat "$tmp_aws"/*.json \
       | jq -s 'reduce flatten[] as $i ({}; . + $i)' \
-      | jq 'to_entries | map(.value |= (to_entries | map(.value.Tags |= reduce (.//[])[] as $i ({}; .[$i.Key] = $i)) | from_entries)) | from_entries'
+      | jq 'map_values(map_values(.Tags |= reduce (.//[])[] as $i ({}; .[$i.Key] = $i)))'
   ) | jq -S -r "$@"
 }
 
