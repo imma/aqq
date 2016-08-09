@@ -13,5 +13,3 @@ function main {
 }
 
 source sub "$BASH_SOURCE" "$@"
-AccountAliases
-imma

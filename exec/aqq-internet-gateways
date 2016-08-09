@@ -13,27 +13,3 @@ function main {
 }
 
 source sub "$BASH_SOURCE" "$@"
-InternetGateways
-{
-  "Attachments": [
-    {
-      "State": "available",
-      "VpcId": "vpc-a0e9b0c5"
-    }
-  ],
-  "InternetGatewayId": "igw-ca69ebaf",
-  "Tags": [
-    {
-      "Key": "Name",
-      "Value": "imma-dev"
-    },
-    {
-      "Key": "Vpc",
-      "Value": "imma-dev"
-    },
-    {
-      "Key": "Provisioner",
-      "Value": "tf"
-    }
-  ]
-}
