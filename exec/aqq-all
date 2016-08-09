@@ -9,7 +9,10 @@ function main {
   fi
 
   export tmp_aws="$(mktemp -d -t XXXXXX)"
-  aq list | runmany 8 '[[ -x $(type -P "aqq-$1") ]] && aqq "$1" "{\"$1\": .}" > "$tmp_aws/$1.json"'
+  trap "rm -rf \"$tmp_aws\"" EXIT
+
+  aq list | runmany 8 '[[ -x $(type -P "aqq-$1") ]] || exit 0; aqq "$1" "{\"$1\": .}" > "$tmp_aws/$1.json"'
+
   (set +f; 
     cat "$tmp_aws"/*.json \
       | jq -s 'reduce flatten[] as $i ({}; . + $i)' \
