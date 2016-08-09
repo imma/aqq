@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+function main {
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+  source "$shome/script/profile"
+
+  aqq index "${BASH_SOURCE##*/aqq-}" '
+    import "aws" as aws;
+
+    .InternetGateways
+      | aws::index(.InternetGatewayId) 
+    ' "$@"
+}
+
+source sub "$BASH_SOURCE" "$@"
+InternetGateways
+{
+  "Attachments": [
+    {
+      "State": "available",
+      "VpcId": "vpc-a0e9b0c5"
+    }
+  ],
+  "InternetGatewayId": "igw-ca69ebaf",
+  "Tags": [
+    {
+      "Key": "Name",
+      "Value": "imma-dev"
+    },
+    {
+      "Key": "Vpc",
+      "Value": "imma-dev"
+    },
+    {
+      "Key": "Provisioner",
+      "Value": "tf"
+    }
+  ]
+}

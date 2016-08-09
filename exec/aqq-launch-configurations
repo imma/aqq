@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+function main {
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+  source "$shome/script/profile"
+
+  aqq index "${BASH_SOURCE##*/aqq-}" '
+    import "aws" as aws;
+
+    .LaunchConfigurations
+      | aws::index(.LaunchConfigurationARN) 
+      + aws::index(.LaunchConfigurationName) 
+    ' "$@"
+}
+
+source sub "$BASH_SOURCE" "$@"
