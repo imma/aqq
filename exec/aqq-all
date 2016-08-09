@@ -10,7 +10,11 @@ function main {
 
   export tmp_aws="$(mktemp -d -t XXXXXX)"
   aq list | runmany 8 '[[ -x $(type -P "aqq-$1") ]] && aqq "$1" "{\"$1\": .}" > "$tmp_aws/$1.json"'
-  (set +f; cat "$tmp_aws"/*.json | jq -s 'reduce flatten[] as $i ({}; . + $i)') | jq -S -r "$@"
+  (set +f; 
+    cat "$tmp_aws"/*.json \
+      | jq -s 'reduce flatten[] as $i ({}; . + $i)' \
+      | jq 'to_entries | map(.value |= (to_entries | map(.value.Tags |= reduce (.//[])[] as $i ({}; .[$i.Key] = $i)) | from_entries)) | from_entries'
+  ) | jq -S -r "$@"
 }
 
 source sub "$BASH_SOURCE" "$@"
