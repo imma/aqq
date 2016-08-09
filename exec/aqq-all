@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+function main {
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+  source "$shome/script/profile"
+
+  if [[ "$#" == 0 ]]; then
+    set -- .
+  fi
+
+  export tmp_aws="$(mktemp -d -t XXXXXX)"
+  aq list | runmany 8 '[[ -x $(type -P "aqq-$1") ]] && aqq "$1" "{\"$1\": .}" > "$tmp_aws/$1.json"'
+  (set +f; cat "$tmp_aws"/*.json | jq -s 'reduce flatten[] as $i ({}; . + $i)') | jq -S -r "$@"
+}
+
+source sub "$BASH_SOURCE" "$@"
