@@ -11,7 +11,13 @@ function main {
     set -- .
   fi
 
-  aq "$nm_resource" -L "$shome/jq" "$jq_index" | jq -r -S "${@}"
+  if [[ ! -f "$shome/.cache/${nm_resource}.json" ]]; then
+    mkdir -p "$shome/.cache"
+    aq "$nm_resource" -L "$shome/jq" "$jq_index" > "$shome/.cache/${nm_resource}.json.$$"
+    mv -f "$shome/.cache/${nm_resource}.json.$$" "$shome/.cache/${nm_resource}.json"
+  fi
+
+  cat "$shome/.cache/${nm_resource}.json" | jq -r -S "${@}"
 }
 
 source sub "$BASH_SOURCE" "$@"

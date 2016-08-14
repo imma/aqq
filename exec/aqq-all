@@ -8,16 +8,19 @@ function main {
     set -- .
   fi
 
-  export tmp_aws="$(mktemp -d -t XXXXXX)"
-  trap "rm -rf \"$tmp_aws\"" EXIT
+  if [[ ! -f "$shome/.cache/all.json" ]]; then
+    export tmp_aws="$(mktemp -d -t XXXXXX)"
+    trap "rm -rf \"$tmp_aws\"" EXIT
 
-  aq list | runmany 8 '[[ -x $(type -P "aqq-$1") ]] || exit 0; aqq "$1" "{\"$1\": .}" > "$tmp_aws/$1.json"'
+    aq list | runmany 8 '[[ -x $(type -P "aqq-$1") ]] || exit 0; aqq "$1" "{\"$1\": .}" > "$tmp_aws/$1.json"'
 
-  (set +f; 
-    cat "$tmp_aws"/*.json \
+    (set +f; cat "$tmp_aws"/*.json) \
       | jq -s 'reduce flatten[] as $i ({}; . + $i)' \
-      | jq 'map_values(map_values(.Tags |= reduce (.//[])[] as $i ({}; .[$i.Key] = $i)))'
-  ) | jq -S -r "$@"
+      | jq 'map_values(map_values(.Tags |= reduce (.//[])[] as $i ({}; .[$i.Key] = $i)))' > "$shome/.cache/all.json.$$"
+    mv -f "$shome/.cache/all.json.$$" "$shome/.cache/all.json"
+  fi
+
+  cat "$shome/.cache/all.json" | jq -r -S "$@"
 }
 
 source sub "$BASH_SOURCE" "$@"
