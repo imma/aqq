@@ -8,8 +8,8 @@ function main {
     import "aws" as aws;
 
     .Images
-      | aws::index(.ImageId) 
-      + aws::index(.Name) 
+      | aws::index(.ImageId)
+      | aws::secondary(.Name)
     ' "$@"
 }
 
