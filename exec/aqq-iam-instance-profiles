@@ -9,8 +9,8 @@ function main {
 
     .InstanceProfiles
       | aws::index(.Arn) 
-      + aws::index(.InstanceProfileId) 
-      + aws::index(.InstanceProfileName) 
+      | aws::secondary(.InstanceProfileId) 
+      | aws::secondary(.InstanceProfileName) 
     ' "$@"
 }
 

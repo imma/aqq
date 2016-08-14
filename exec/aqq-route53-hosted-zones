@@ -9,7 +9,7 @@ function main {
 
     .HostedZones
       | aws::index(.Id) 
-      + aws::index(.Name) 
+      | aws::secondary(.Name) 
     ' "$@"
 }
 

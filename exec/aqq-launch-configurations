@@ -9,7 +9,7 @@ function main {
 
     .LaunchConfigurations
       | aws::index(.LaunchConfigurationARN) 
-      + aws::index(.LaunchConfigurationName) 
+      | aws::secondary(.LaunchConfigurationName) 
     ' "$@"
 }
 

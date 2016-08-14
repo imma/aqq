@@ -9,10 +9,10 @@ function main {
 
     [.Reservations[].Instances] 
       | aws::index(.InstanceId) 
-      + aws::index(.PrivateIpAddress)
-      + aws::index(.PrivateDnsName)
-      + aws::index(.PublicIpAddress)
-      + aws::index(.PublicDnsName)
+      | aws::secondary(.PrivateIpAddress)
+      | aws::secondary(.PrivateDnsName)
+      | aws::secondary(.PublicIpAddress)
+      | aws::secondary(.PublicDnsName)
     ' "$@"
 }
 

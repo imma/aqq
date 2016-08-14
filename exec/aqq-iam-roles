@@ -9,8 +9,8 @@ function main {
 
     .Roles
       | aws::index(.Arn) 
-      + aws::index(.RoleId) 
-      + aws::index(.RoleName) 
+      | aws::secondary(.RoleId) 
+      | aws::secondary(.RoleName) 
     ' "$@"
 }
 

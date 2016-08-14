@@ -9,8 +9,8 @@ function main {
 
     .Groups
       | aws::index(.GroupId) 
-      + aws::index(.GroupName) 
-      + aws::index(.Arn) 
+      | aws::secondary(.GroupName) 
+      | aws::secondary(.Arn) 
     ' "$@"
 }
 

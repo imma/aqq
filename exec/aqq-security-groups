@@ -9,7 +9,7 @@ function main {
 
     .SecurityGroups
       | aws::index(.GroupId) 
-      + aws::index(.GroupName) 
+      | aws::secondary(.GroupName) 
     ' "$@"
 }
 

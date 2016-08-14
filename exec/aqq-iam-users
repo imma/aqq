@@ -9,8 +9,8 @@ function main {
 
     .Users
       | aws::index(.Arn) 
-      + aws::index(.UserId) 
-      + aws::index(.UserName) 
+      | aws::secondary(.UserId) 
+      | aws::secondary(.UserName) 
     ' "$@"
 }
 

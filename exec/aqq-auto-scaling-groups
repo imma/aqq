@@ -9,7 +9,7 @@ function main {
 
     .AutoScalingGroups
       | aws::index(.AutoScalingGroupARN) 
-      + aws::index(.AutoScalingGroupName) 
+      | aws::secondary(.AutoScalingGroupName) 
     ' "$@"
 }
 

@@ -9,7 +9,7 @@ function main {
 
     .LoadBalancerDescriptions
       | aws::index(.DNSName) 
-      + aws::index(.LoadBalancerName) 
+      | aws::secondary(.LoadBalancerName) 
     ' "$@"
 }
 

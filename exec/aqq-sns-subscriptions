@@ -9,7 +9,7 @@ function main {
 
     .Subscriptions
       | aws::index(.Endpoint) 
-      + aws::index(.SubscriptionArn) 
+      | aws::secondary(.SubscriptionArn) 
     ' "$@"
 }
 

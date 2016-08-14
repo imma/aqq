@@ -9,8 +9,8 @@ function main {
 
     .Policies
       | aws::index(.Arn) 
-      + aws::index(.PolicyId) 
-      + aws::index(.PolicyName) 
+      | aws::secondary(.PolicyId) 
+      | aws::secondary(.PolicyName) 
     ' "$@"
 }
 

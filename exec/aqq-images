@@ -9,7 +9,7 @@ function main {
 
     .Images
       | aws::index(.ImageId) 
-      + aws::index(.Name) 
+      | aws::secondary(.Name) 
     ' "$@"
 }
 

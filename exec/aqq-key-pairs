@@ -8,7 +8,7 @@ function main {
     import "aws" as aws;
 
     .KeyPairs
-      + aws::index(.KeyName) 
+      | aws::secondary(.KeyName) 
     ' "$@"
 }
 
