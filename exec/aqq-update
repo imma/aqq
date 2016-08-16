@@ -5,7 +5,7 @@ function main {
   source "$shome/script/profile"
 
   (set +f; rm -f "$shome/.cache"/*.json)
-  aqq all "$@"
+  aqq all >/dev/null
 }
 
 source sub "$BASH_SOURCE" "$@"
