@@ -3,14 +3,13 @@
 function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile"
+  source normalize  
 
-  aqq index "${BASH_SOURCE##*/aqq-}" '
-    import "aws" as aws;
-
-    .Images
-      | aws::index(.ImageId) 
-      | aws::secondary(.Name) 
-    ' "$@"
+  aqq '
+    $volumes
+      | map(select(.Attachments | length == 0)) 
+      | map("\(.VolumeId) \(.Tags.Name//"")")' \
+      | jq -r "$@"
 }
 
 source sub "$BASH_SOURCE" "$@"
