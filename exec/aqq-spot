@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+function main {
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+  source "$shome/script/profile"
+  source normalize  
+
+  aws ec2 describe-spot-price-history --instance-types "$@" --start-time=$(date +%s) --product-descriptions 'Linux/UNIX (Amazon VPC)' --query 'SpotPriceHistory[*].{az:AvailabilityZone, price:SpotPrice, instance:InstanceType}' | jq 'sort_by(.price)'
+}
+
+source sub "$BASH_SOURCE" "$@"
